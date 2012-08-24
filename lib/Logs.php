@@ -54,6 +54,7 @@ class Logs extends Object{
     public function copyFromZen(){
         global $messageStack;
         // $this->messages[] = array('params' => 'class="alert alert-error"', 'class' => $class, 'text' => zen_image($template->get_template_dir(ICON_IMAGE_ERROR, DIR_WS_TEMPLATE, $current_page_base,'images/icons'). '/' . ICON_IMAGE_ERROR, ICON_ERROR_ALT) . '  ' . $message);
+        if(is_object($messageStack) && isset($messageStack->messages) && is_array($messageStack->messages))
         foreach ($messageStack->messages as $message){
             $this->add(array(
                 'message' => $message['text'],
