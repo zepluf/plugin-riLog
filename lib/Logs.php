@@ -52,13 +52,38 @@ class Logs extends Object{
 
     public function copyFromZen(){
         global $messageStack;
-        $messages = IS_ADMIN_FLAG ? $messageStack->errors : $messageStack->messages;
-        foreach ($messages as $message){
-            $this->add(array(
-                'message' => $message['text'],
-                'scope' => $message['class']
-            ));
+        if(!IS_ADMIN_FLAG){
+            foreach ($messageStack->messages as $message){
+                $this->add(array(
+                    'message' => $message['text'],
+                    'scope' => $message['class'],
+                    'type' => $this->getZenMessageType($message['class'])
+                ));
+            }
         }
+        else{
+            foreach ($messageStack->errors as $message){
+                $this->add(array(
+                    'message' => $message['text'],
+                    'scope' => 'global',
+                    'type' => $this->getZenMessageType($message['params'])
+                ));
+            }
+        }
+    }
+
+    private function getZenMessageType($class){
+        $types = array(
+            'messageStackError' => 'error',
+            'messageStackWarning' => 'warning',
+            'messageStackSuccess' => 'success',
+            'messageStackCaution' => 'caution',
+        );
+        foreach ($types as $identified => $type){
+            if(strpos($class, $identified) !== false)
+                return $type;
+        }
+        return 'error';
     }
 
 	public function getAsArray(){
