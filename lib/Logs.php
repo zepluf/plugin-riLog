@@ -92,7 +92,11 @@ class Logs extends Object{
 	        $logs[] = $log->getArray();
 	    return $logs;
 	}
-	
+
+    public function render(){
+        return Plugin::get('view')->render('riLog::_logs.php', array('logs' => $this->logs));
+    }
+
 	public function clear(){
 		$this->logs = array();
 	}
